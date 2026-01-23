@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMER TARIG - Drive Through My Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            overflow: hidden;
+            background: #1a1a2e;
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-car {
+            font-size: 80px;
+            animation: carBounce 1s ease-in-out infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes carBounce {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .loading-title {
+            font-family: 'Russo One', sans-serif;
+            font-size: 36px;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+        }
+
+        .loading-subtitle {
+            color: #00f0ff;
+            font-size: 14px;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+        }
+
+        .loading-bar-container {
+            width: 300px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00f0ff, #ff00ff, #00f0ff);
+            background-size: 200% 100%;
+            animation: loadingGradient 1s linear infinite;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        @keyframes loadingGradient {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            color: #888;
+            font-size: 12px;
+        }
+
+        /* Instructions */
+        .instructions {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            z-index: 100;
+            text-align: center;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .instructions.hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+            pointer-events: none;
+        }
+
+        .instructions h3 {
+            color: #00f0ff;
+            font-size: 14px;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .keys {
+            display: flex;
+            gap: 5px;
+        }
+
+        .key {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(180deg, #333 0%, #222 100%);
+            border: 2px solid #444;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            box-shadow: 0 4px 0 #111;
+        }
+
+        .key.arrow {
+            font-size: 12px;
+        }
+
+        .control-label {
+            color: #888;
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        /* UI Overlay */
+        .ui-overlay {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+
+        .player-info {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .player-name {
+            font-family: 'Russo One', sans-serif;
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .player-title {
+            color: #00f0ff;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        /* Speed Meter */
+        .speed-meter {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+        }
+
+        .speedometer {
+            width: 150px;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            border: 3px solid #00f0ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+        }
+
+        .speed-value {
+            font-family: 'Russo One', sans-serif;
+            font-size: 36px;
+            color: #fff;
+        }
+
+        .speed-unit {
+            color: #00f0ff;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        /* Info Panels */
+        .info-panel {
+            position: fixed;
+            top: 50%;
+            right: -400px;
+            transform: translateY(-50%);
+            width: 350px;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px 0 0 20px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-right: none;
+            z-index: 200;
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .info-panel.active {
+            right: 0;
+        }
+
+        .info-panel h2 {
+            font-family: 'Russo One', sans-serif;
+            font-size: 24px;
+            color: #00f0ff;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .info-panel p {
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .info-panel .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: 1px solid #ff3366;
+            border-radius: 50%;
+            color: #ff3366;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .info-panel .close-btn:hover {
+            background: #ff3366;
+            color: #fff;
+        }
+
+        .skill-bars {
+            margin-top: 20px;
+        }
+
+        .skill-bar {
+            margin-bottom: 15px;
+        }
+
+        .skill-bar .label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+
+        .skill-bar .label span:first-child {
+            color: #fff;
+        }
+
+        .skill-bar .label span:last-child {
+            color: #00f0ff;
+        }
+
+        .skill-bar .bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .skill-bar .fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .skill-bar .fill.react { background: linear-gradient(90deg, #61dafb, #00d9ff); }
+        .skill-bar .fill.node { background: linear-gradient(90deg, #68a063, #8cc84b); }
+        .skill-bar .fill.python { background: linear-gradient(90deg, #3776ab, #ffd43b); }
+        .skill-bar .fill.db { background: linear-gradient(90deg, #336791, #00758f); }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .project-card h4 {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .project-card p {
+            color: #888;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .project-tag {
+            padding: 3px 8px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid #00f0ff;
+            border-radius: 10px;
+            font-size: 9px;
+            color: #00f0ff;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .contact-link:hover {
+            background: rgba(0, 240, 255, 0.1);
+            border-color: #00f0ff;
+            transform: translateX(5px);
+        }
+
+        .contact-link span {
+            font-size: 24px;
+        }
+
+        /* Mini Map */
+        .mini-map {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 180px;
+            height: 180px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            z-index: 100;
+            padding: 10px;
+        }
+
+        .mini-map-title {
+            color: #00f0ff;
+            font-size: 10px;
+            text-align: center;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .mini-map-canvas {
+            width: 100%;
+            height: calc(100% - 25px);
+            background: #111;
+            border-radius: 5px;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 10px;
+            border: 2px solid #00f0ff;
+            color: #fff;
+            font-size: 14px;
+            z-index: 300;
+            opacity: 0;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .notification.success {
+            border-color: #00ff88;
+        }
+
+        /* Mobile Controls */
+        .mobile-controls {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+
+        .joystick-container {
+            width: 120px;
+            height: 120px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            border: 2px solid rgba(0, 240, 255, 0.3);
+            position: relative;
+        }
+
+        .joystick {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00f0ff, #ff00ff);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-controls {
+                display: block;
+            }
+
+            .instructions {
+                display: none;
+            }
+
+            .speed-meter {
+                bottom: 150px;
+                right: 20px;
+            }
+
+            .speedometer {
+                width: 100px;
+                height: 100px;
+            }
+
+            .speed-value {
+                font-size: 24px;
+            }
+
+            .mini-map {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        /* Zone Labels */
+        .zone-label {
+            position: absolute;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00f0ff;
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Russo One', sans-serif;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-car">🚗</div>
+        <h1 class="loading-title">OMER TARIG</h1>
+        <p class="loading-subtitle">DRIVE THROUGH MY PORTFOLIO</p>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loadingBar"></div>
+        </div>
+        <p class="loading-text" id="loadingText">Loading 3D World...</p>
+    </div>
+
+    <!-- Canvas -->
+    <canvas id="canvas"></canvas>
+
+    <!-- UI Overlay -->
+    <div class="ui-overlay">
+        <div class="player-info">
+            <div class="player-name">OMER TARIG</div>
+            <div class="player-title">FULL STACK DEVELOPER</div>
+        </div>
+    </div>
+
+    <!-- Speed Meter -->
+    <div class="speed-meter">
+        <div class="speedometer">
+            <div class="speed-value" id="speedValue">0</div>
+            <div class="speed-unit">KM/H</div>
+        </div>
+    </div>
+
+    <!-- Mini Map -->
+    <div class="mini-map">
+        <div class="mini-map-title">MAP</div>
+        <canvas class="mini-map-canvas" id="miniMapCanvas"></canvas>
+    </div>
+
+    <!-- Instructions -->
+    <div class="instructions" id="instructions">
+        <h3>🎮 CONTROLS</h3>
+        <div class="controls">
+            <div class="control-group">
+                <div class="keys">
+                    <div class="key">W</div>
+                </div>
+                <div class="keys">
+                    <div class="key">A</div>
+                    <div class="key">S</div>
+                    <div class="key">D</div>
+                </div>
+                <div class="control-label">MOVE</div>
+            </div>
+            <div class="control-group">
+                <div class="keys">
+                    <div class="key arrow">↑</div>
+                </div>
+                <div class="keys">
+                    <div class="key arrow">←</div>
+                    <div class="key arrow">↓</div>
+                    <div class="key arrow">→</div>
+                </div>
+                <div class="control-label">OR ARROWS</div>
+            </div>
+            <div class="control-group">
+                <div class="key" style="width: 80px;">SPACE</div>
+                <div class="control-label">BRAKE</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Controls -->
+    <div class="mobile-controls" id="mobileControls">
+        <div class="joystick-container" id="joystickContainer">
+            <div class="joystick" id="joystick"></div>
+        </div>
+    </div>
+
+    <!-- Info Panels -->
+    <div class="info-panel" id="aboutPanel">
+        <button class="close-btn" onclick="closePanel('aboutPanel')">×</button>
+        <h2>👋 ABOUT ME</h2>
+        <p>Hey! I'm Omer Tarig, a passionate Full Stack Developer based in Riyadh, Saudi Arabia.</p>
+        <p>I love building interactive web experiences and turning complex problems into elegant solutions.</p>
+        <p>With expertise in modern web technologies, I create applications that are both powerful and delightful to use.</p>
+    </div>
+
+    <div class="info-panel" id="skillsPanel">
+        <button class="close-btn" onclick="closePanel('skillsPanel')">×</button>
+        <h2>⚡ SKILLS</h2>
+        <div class="skill-bars">
+            <div class="skill-bar">
+                <div class="label"><span>React / Next.js</span><span>95%</span></div>
+                <div class="bar"><div class="fill react" style="width: 0%" data-width="95%"></div></div>
+            </div>
+            <div class="skill-bar">
+                <div class="label"><span>Node.js / Express</span><span>90%</span></div>
+                <div class="bar"><div class="fill node" style="width: 0%" data-width="90%"></div></div>
+            </div>
+            <div class="skill-bar">
+                <div class="label"><span>Python / Django</span><span>85%</span></div>
+                <div class="bar"><div class="fill python" style="width: 0%" data-width="85%"></div></div>
+            </div>
+            <div class="skill-bar">
+                <div class="label"><span>MongoDB / PostgreSQL</span><span>88%</span></div>
+                <div class="bar"><div class="fill db" style="width: 0%" data-width="88%"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-panel" id="projectsPanel">
+        <button class="close-btn" onclick="closePanel('projectsPanel')">×</button>
+        <h2>🚀 PROJECTS</h2>
+        <div class="project-card">
+            <h4>E-Commerce Platform</h4>
+            <p>Full-stack marketplace with real-time inventory</p>
+            <div class="project-tags">
+                <span class="project-tag">React</span>
+                <span class="project-tag">Node.js</span>
+                <span class="project-tag">MongoDB</span>
+            </div>
+        </div>
+        <div class="project-card">
+            <h4>AI Dashboard</h4>
+            <p>Analytics platform with ML predictions</p>
+            <div class="project-tags">
+                <span class="project-tag">Python</span>
+                <span class="project-tag">TensorFlow</span>
+                <span class="project-tag">React</span>
+            </div>
+        </div>
+        <div class="project-card">
+            <h4>Real-time Chat App</h4>
+            <p>WebSocket-based messaging system</p>
+            <div class="project-tags">
+                <span class="project-tag">Socket.io</span>
+                <span class="project-tag">Redis</span>
+                <span class="project-tag">React</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-panel" id="contactPanel">
+        <button class="close-btn" onclick="closePanel('contactPanel')">×</button>
+        <h2>📬 CONTACT</h2>
+        <p>Let's work together! Feel free to reach out through any of these channels:</p>
+        <div class="contact-links">
+            <a href="mailto:omerajwa49@gmail.com" class="contact-link">
+                <span>📧</span>
+                <div>
+                    <strong>Email</strong><br>
+                    <small style="color: #888;">omerajwa49@gmail.com</small>
+                </div>
+            </a>
+            <a href="https://linkedin.com" target="_blank" class="contact-link">
+                <span>💼</span>
+                <div>
+                    <strong>LinkedIn</strong><br>
+                    <small style="color: #888;">Connect with me</small>
+                </div>
+            </a>
+            <a href="https://github.com" target="_blank" class="contact-link">
+                <span>🐙</span>
+                <div>
+                    <strong>GitHub</strong><br>
+                    <small style="color: #888;">View my code</small>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <!-- Cannon.js Physics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+
+    <script>
+        // ==========================================
+        // GAME CONFIGURATION
+        // ==========================================
+        const CONFIG = {
+            carSpeed: 50,
+            carTurnSpeed: 3,
+            cameraDistance: 15,
+            cameraHeight: 8,
+            worldSize: 200,
+            groundColor: 0x1a1a2e,
+            skyColor: 0x0a0a15
+        };
+
+        // ==========================================
+        // GLOBAL VARIABLES
+        // ==========================================
+        let scene, camera, renderer;
+        let world, carBody;
+        let car, wheels = [];
+        let keys = {};
+        let speed = 0;
+        let currentZone = null;
+        let zones = [];
+
+        // DOM Elements
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingBar = document.getElementById('loadingBar');
+        const loadingText = document.getElementById('loadingText');
+        const speedValue = document.getElementById('speedValue');
+        const instructions = document.getElementById('instructions');
+        const notification = document.getElementById('notification');
+        const miniMapCanvas = document.getElementById('miniMapCanvas');
+        const miniMapCtx = miniMapCanvas.getContext('2d');
+
+        // ==========================================
+        // LOADING
+        // ==========================================
+        let loadProgress = 0;
+        const loadingMessages = [
+            'Creating 3D world...',
+            'Building roads...',
+            'Placing buildings...',
+            'Spawning car...',
+            'Setting up physics...',
+            'Adding details...',
+            'Almost ready...',
+            'START DRIVING!'
+        ];
+
+        function updateLoading(progress, message) {
+            loadProgress = progress;
+            loadingBar.style.width = progress + '%';
+            if (message) loadingText.textContent = message;
+        }
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+        async function init() {
+            updateLoading(10, loadingMessages[0]);
+
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(CONFIG.skyColor);
+            scene.fog = new THREE.Fog(CONFIG.skyColor, 50, 200);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, CONFIG.cameraHeight, CONFIG.cameraDistance);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            updateLoading(20, loadingMessages[1]);
+
+            // Physics World
+            world = new CANNON.World();
+            world.gravity.set(0, -30, 0);
+            world.broadphase = new CANNON.NaiveBroadphase();
+
+            // Lights
+            createLights();
+
+            updateLoading(30, loadingMessages[2]);
+
+            // Ground
+            createGround();
+
+            updateLoading(40, loadingMessages[3]);
+
+            // Roads
+            createRoads();
+
+            updateLoading(50, loadingMessages[4]);
+
+            // Car
+            createCar();
+
+            updateLoading(60, loadingMessages[5]);
+
+            // Buildings/Zones
+            createZones();
+
+            updateLoading(70, loadingMessages[6]);
+
+            // Decorations
+            createDecorations();
+
+            updateLoading(90, loadingMessages[7]);
+
+            // Mini Map Setup
+            setupMiniMap();
+
+            // Event Listeners
+            setupEventListeners();
+
+            updateLoading(100, loadingMessages[7]);
+
+            // Hide loading screen
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                // Hide instructions after 5 seconds
+                setTimeout(() => {
+                    instructions.classList.add('hidden');
+                }, 8000);
+            }, 500);
+
+            // Start animation
+            animate();
+        }
+
+        // ==========================================
+        // LIGHTS
+        // ==========================================
+        function createLights() {
+            // Ambient light
+            const ambientLight = new THREE.AmbientLight(0x404060, 0.5);
+            scene.add(ambientLight);
+
+            // Main directional light
+            const mainLight = new THREE.DirectionalLight(0xffffff, 1);
+            mainLight.position.set(50, 100, 50);
+            mainLight.castShadow = true;
+            mainLight.shadow.mapSize.width = 2048;
+            mainLight.shadow.mapSize.height = 2048;
+            mainLight.shadow.camera.near = 0.5;
+            mainLight.shadow.camera.far = 500;
+            mainLight.shadow.camera.left = -100;
+            mainLight.shadow.camera.right = 100;
+            mainLight.shadow.camera.top = 100;
+            mainLight.shadow.camera.bottom = -100;
+            scene.add(mainLight);
+
+            // Hemisphere light for sky color
+            const hemiLight = new THREE.HemisphereLight(0x00f0ff, 0x1a1a2e, 0.3);
+            scene.add(hemiLight);
+
+            // Point lights for zones
+            const colors = [0x00f0ff, 0xff00ff, 0x00ff88, 0xffff00];
+            const positions = [
+                [-40, 10, -40],
+                [40, 10, -40],
+                [-40, 10, 40],
+                [40, 10, 40]
+            ];
+
+            positions.forEach((pos, i) => {
+                const light = new THREE.PointLight(colors[i], 1, 50);
+                light.position.set(...pos);
+                scene.add(light);
+            });
+        }
+
+        // ==========================================
+        // GROUND
+        // ==========================================
+        function createGround() {
+            // Visual ground
+            const groundGeometry = new THREE.PlaneGeometry(CONFIG.worldSize * 2, CONFIG.worldSize * 2);
+            const groundMaterial = new THREE.MeshStandardMaterial({
+                color: CONFIG.groundColor,
+                roughness: 0.8,
+                metalness: 0.2
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+
+            // Grid lines
+            const gridHelper = new THREE.GridHelper(CONFIG.worldSize * 2, 50, 0x00f0ff, 0x111122);
+            gridHelper.position.y = 0.01;
+            scene.add(gridHelper);
+
+            // Physics ground
+            const groundShape = new CANNON.Plane();
+            const groundBody = new CANNON.Body({ mass: 0 });
+            groundBody.addShape(groundShape);
+            groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
+            world.addBody(groundBody);
+        }
+
+        // ==========================================
+        // ROADS
+        // ==========================================
+        function createRoads() {
+            const roadMaterial = new THREE.MeshStandardMaterial({
+                color: 0x222233,
+                roughness: 0.9,
+                metalness: 0.1
+            });
+
+            const lineMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+
+            // Main roads (cross pattern)
+            const roadWidth = 10;
+            const roadLength = CONFIG.worldSize * 1.5;
+
+            // Horizontal road
+            const hRoad = new THREE.Mesh(
+                new THREE.PlaneGeometry(roadLength, roadWidth),
+                roadMaterial
+            );
+            hRoad.rotation.x = -Math.PI / 2;
+            hRoad.position.y = 0.02;
+            scene.add(hRoad);
+
+            // Vertical road
+            const vRoad = new THREE.Mesh(
+                new THREE.PlaneGeometry(roadWidth, roadLength),
+                roadMaterial
+            );
+            vRoad.rotation.x = -Math.PI / 2;
+            vRoad.position.y = 0.02;
+            scene.add(vRoad);
+
+            // Road lines
+            for (let i = -roadLength/2 + 5; i < roadLength/2; i += 10) {
+                // Horizontal road center line
+                const hLine = new THREE.Mesh(
+                    new THREE.PlaneGeometry(5, 0.3),
+                    lineMaterial
+                );
+                hLine.rotation.x = -Math.PI / 2;
+                hLine.position.set(i, 0.03, 0);
+                scene.add(hLine);
+
+                // Vertical road center line
+                const vLine = new THREE.Mesh(
+                    new THREE.PlaneGeometry(0.3, 5),
+                    lineMaterial
+                );
+                vLine.rotation.x = -Math.PI / 2;
+                vLine.position.set(0, 0.03, i);
+                scene.add(vLine);
+            }
+        }
+
+        // ==========================================
+        // CAR
+        // ==========================================
+        function createCar() {
+            car = new THREE.Group();
+
+            // Car body
+            const bodyGeometry = new THREE.BoxGeometry(2, 0.8, 4);
+            const bodyMaterial = new THREE.MeshStandardMaterial({
+                color: 0xff3366,
+                metalness: 0.8,
+                roughness: 0.2
+            });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = 0.6;
+            body.castShadow = true;
+            car.add(body);
+
+            // Car top
+            const topGeometry = new THREE.BoxGeometry(1.6, 0.6, 2);
+            const topMaterial = new THREE.MeshStandardMaterial({
+                color: 0x222233,
+                metalness: 0.9,
+                roughness: 0.1
+            });
+            const top = new THREE.Mesh(topGeometry, topMaterial);
+            top.position.set(0, 1.2, -0.3);
+            top.castShadow = true;
+            car.add(top);
+
+            // Headlights
+            const lightGeometry = new THREE.BoxGeometry(0.3, 0.2, 0.1);
+            const lightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffcc });
+
+            const leftLight = new THREE.Mesh(lightGeometry, lightMaterial);
+            leftLight.position.set(-0.6, 0.5, 2);
+            car.add(leftLight);
+
+            const rightLight = new THREE.Mesh(lightGeometry, lightMaterial);
+            rightLight.position.set(0.6, 0.5, 2);
+            car.add(rightLight);
+
+            // Headlight glow
+            const leftGlow = new THREE.PointLight(0xffffcc, 0.5, 10);
+            leftGlow.position.set(-0.6, 0.5, 3);
+            car.add(leftGlow);
+
+            const rightGlow = new THREE.PointLight(0xffffcc, 0.5, 10);
+            rightGlow.position.set(0.6, 0.5, 3);
+            car.add(rightGlow);
+
+            // Tail lights
+            const tailMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+
+            const leftTail = new THREE.Mesh(lightGeometry, tailMaterial);
+            leftTail.position.set(-0.6, 0.5, -2);
+            car.add(leftTail);
+
+            const rightTail = new THREE.Mesh(lightGeometry, tailMaterial);
+            rightTail.position.set(0.6, 0.5, -2);
+            car.add(rightTail);
+
+            // Wheels
+            const wheelGeometry = new THREE.CylinderGeometry(0.4, 0.4, 0.3, 16);
+            const wheelMaterial = new THREE.MeshStandardMaterial({
+                color: 0x111111,
+                metalness: 0.5,
+                roughness: 0.5
+            });
+
+            const wheelPositions = [
+                [-1, 0.4, 1.3],
+                [1, 0.4, 1.3],
+                [-1, 0.4, -1.3],
+                [1, 0.4, -1.3]
+            ];
+
+            wheelPositions.forEach(pos => {
+                const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+                wheel.rotation.z = Math.PI / 2;
+                wheel.position.set(...pos);
+                wheel.castShadow = true;
+                wheels.push(wheel);
+                car.add(wheel);
+            });
+
+            // Neon underglow
+            const underglowGeometry = new THREE.PlaneGeometry(2.5, 4.5);
+            const underglowMaterial = new THREE.MeshBasicMaterial({
+                color: 0x00f0ff,
+                transparent: true,
+                opacity: 0.3,
+                side: THREE.DoubleSide
+            });
+            const underglow = new THREE.Mesh(underglowGeometry, underglowMaterial);
+            underglow.rotation.x = Math.PI / 2;
+            underglow.position.y = 0.1;
+            car.add(underglow);
+
+            scene.add(car);
+
+            // Physics body for car
+            const carShape = new CANNON.Box(new CANNON.Vec3(1, 0.5, 2));
+            carBody = new CANNON.Body({
+                mass: 500,
+                shape: carShape,
+                position: new CANNON.Vec3(0, 2, 0),
+                linearDamping: 0.5,
+                angularDamping: 0.9
+            });
+            world.addBody(carBody);
+        }
+
+        // ==========================================
+        // ZONES (Portfolio Sections)
+        // ==========================================
+        function createZones() {
+            const zoneData = [
+                { name: 'ABOUT', color: 0x00f0ff, position: [-40, 0, -40], panel: 'aboutPanel' },
+                { name: 'SKILLS', color: 0xff00ff, position: [40, 0, -40], panel: 'skillsPanel' },
+                { name: 'PROJECTS', color: 0x00ff88, position: [-40, 0, 40], panel: 'projectsPanel' },
+                { name: 'CONTACT', color: 0xffff00, position: [40, 0, 40], panel: 'contactPanel' }
+            ];
+
+            zoneData.forEach(zone => {
+                // Platform
+                const platformGeometry = new THREE.CylinderGeometry(12, 12, 0.5, 32);
+                const platformMaterial = new THREE.MeshStandardMaterial({
+                    color: zone.color,
+                    emissive: zone.color,
+                    emissiveIntensity: 0.2,
+                    metalness: 0.8,
+                    roughness: 0.2
+                });
+                const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+                platform.position.set(...zone.position);
+                platform.position.y = 0.25;
+                platform.receiveShadow = true;
+                scene.add(platform);
+
+                // Glowing ring
+                const ringGeometry = new THREE.TorusGeometry(13, 0.3, 16, 50);
+                const ringMaterial = new THREE.MeshBasicMaterial({
+                    color: zone.color,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+                ring.position.set(...zone.position);
+                ring.position.y = 0.5;
+                ring.rotation.x = Math.PI / 2;
+                scene.add(ring);
+
+                // Floating text indicator
+                const pillarGeometry = new THREE.BoxGeometry(1, 8, 1);
+                const pillarMaterial = new THREE.MeshStandardMaterial({
+                    color: zone.color,
+                    emissive: zone.color,
+                    emissiveIntensity: 0.3
+                });
+                const pillar = new THREE.Mesh(pillarGeometry, pillarMaterial);
+                pillar.position.set(zone.position[0], 4, zone.position[2]);
+                pillar.castShadow = true;
+                scene.add(pillar);
+
+                // Floating cube on top
+                const cubeGeometry = new THREE.BoxGeometry(2, 2, 2);
+                const cubeMaterial = new THREE.MeshStandardMaterial({
+                    color: zone.color,
+                    emissive: zone.color,
+                    emissiveIntensity: 0.5,
+                    metalness: 1,
+                    roughness: 0
+                });
+                const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+                cube.position.set(zone.position[0], 10, zone.position[2]);
+                cube.castShadow = true;
+                cube.userData = { floatOffset: Math.random() * Math.PI * 2 };
+                scene.add(cube);
+
+                // Store zone info
+                zones.push({
+                    name: zone.name,
+                    position: new THREE.Vector3(...zone.position),
+                    radius: 15,
+                    panel: zone.panel,
+                    cube: cube,
+                    ring: ring
+                });
+
+                // Physics collision for platform
+                const platformShape = new CANNON.Cylinder(12, 12, 0.5, 16);
+                const platformBody = new CANNON.Body({ mass: 0 });
+                platformBody.addShape(platformShape);
+                platformBody.position.set(...zone.position);
+                platformBody.position.y = 0.25;
+                world.addBody(platformBody);
+            });
+        }
+
+        // ==========================================
+        // DECORATIONS
+        // ==========================================
+        function createDecorations() {
+            // Trees/Poles
+            const poleGeometry = new THREE.CylinderGeometry(0.2, 0.3, 6, 8);
+            const poleMaterial = new THREE.MeshStandardMaterial({ color: 0x333344 });
+            const lampGeometry = new THREE.SphereGeometry(0.5, 16, 16);
+
+            for (let i = 0; i < 20; i++) {
+                const angle = (i / 20) * Math.PI * 2;
+                const radius = 60 + Math.random() * 20;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+
+                // Pole
+                const pole = new THREE.Mesh(poleGeometry, poleMaterial);
+                pole.position.set(x, 3, z);
+                pole.castShadow = true;
+                scene.add(pole);
+
+                // Lamp
+                const lampColor = [0x00f0ff, 0xff00ff, 0x00ff88][Math.floor(Math.random() * 3)];
+                const lampMaterial = new THREE.MeshBasicMaterial({ color: lampColor });
+                const lamp = new THREE.Mesh(lampGeometry, lampMaterial);
+                lamp.position.set(x, 6.5, z);
+                scene.add(lamp);
+
+                // Light
+                const light = new THREE.PointLight(lampColor, 0.5, 20);
+                light.position.set(x, 6.5, z);
+                scene.add(light);
+            }
+
+            // Floating particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particleCount = 500;
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * CONFIG.worldSize * 2;
+                positions[i + 1] = Math.random() * 50;
+                positions[i + 2] = (Math.random() - 0.5) * CONFIG.worldSize * 2;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                color: 0x00f0ff,
+                size: 0.5,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
+        }
+
+        // ==========================================
+        // MINI MAP
+        // ==========================================
+        function setupMiniMap() {
+            miniMapCanvas.width = 160;
+            miniMapCanvas.height = 145;
+        }
+
+        function updateMiniMap() {
+            const ctx = miniMapCtx;
+            const scale = 0.8;
+            const centerX = miniMapCanvas.width / 2;
+            const centerY = miniMapCanvas.height / 2;
+
+            // Clear
+            ctx.fillStyle = '#111';
+            ctx.fillRect(0, 0, miniMapCanvas.width, miniMapCanvas.height);
+
+            // Draw roads
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(miniMapCanvas.width, centerY);
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, miniMapCanvas.height);
+            ctx.stroke();
+
+            // Draw zones
+            zones.forEach(zone => {
+                const x = centerX + (zone.position.x * scale);
+                const y = centerY + (zone.position.z * scale);
+
+                ctx.beginPath();
+                ctx.arc(x, y, 8, 0, Math.PI * 2);
+                ctx.fillStyle = zone.name === 'ABOUT' ? '#00f0ff' :
+                               zone.name === 'SKILLS' ? '#ff00ff' :
+                               zone.name === 'PROJECTS' ? '#00ff88' : '#ffff00';
+                ctx.fill();
+            });
+
+            // Draw car
+            const carX = centerX + (car.position.x * scale);
+            const carY = centerY + (car.position.z * scale);
+
+            ctx.save();
+            ctx.translate(carX, carY);
+            ctx.rotate(-car.rotation.y);
+            ctx.fillStyle = '#ff3366';
+            ctx.fillRect(-3, -5, 6, 10);
+            ctx.restore();
+        }
+
+        // ==========================================
+        // EVENT LISTENERS
+        // ==========================================
+        function setupEventListeners() {
+            // Keyboard
+            window.addEventListener('keydown', (e) => {
+                keys[e.key.toLowerCase()] = true;
+                keys[e.code] = true;
+            });
+
+            window.addEventListener('keyup', (e) => {
+                keys[e.key.toLowerCase()] = false;
+                keys[e.code] = false;
+            });
+
+            // Resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // Mobile joystick
+            setupMobileControls();
+        }
+
+        // ==========================================
+        // MOBILE CONTROLS
+        // ==========================================
+        let joystickActive = false;
+        let joystickX = 0;
+        let joystickY = 0;
+
+        function setupMobileControls() {
+            const joystickContainer = document.getElementById('joystickContainer');
+            const joystick = document.getElementById('joystick');
+
+            joystickContainer.addEventListener('touchstart', handleJoystickStart);
+            joystickContainer.addEventListener('touchmove', handleJoystickMove);
+            joystickContainer.addEventListener('touchend', handleJoystickEnd);
+
+            function handleJoystickStart(e) {
+                e.preventDefault();
+                joystickActive = true;
+            }
+
+            function handleJoystickMove(e) {
+                if (!joystickActive) return;
+                e.preventDefault();
+
+                const touch = e.touches[0];
+                const rect = joystickContainer.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                let deltaX = touch.clientX - centerX;
+                let deltaY = touch.clientY - centerY;
+
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                const maxDistance = 35;
+
+                if (distance > maxDistance) {
+                    deltaX = (deltaX / distance) * maxDistance;
+                    deltaY = (deltaY / distance) * maxDistance;
+                }
+
+                joystick.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
+
+                joystickX = deltaX / maxDistance;
+                joystickY = -deltaY / maxDistance;
+            }
+
+            function handleJoystickEnd() {
+                joystickActive = false;
+                joystick.style.transform = 'translate(-50%, -50%)';
+                joystickX = 0;
+                joystickY = 0;
+            }
+        }
+
+        // ==========================================
+        // CAR CONTROLS
+        // ==========================================
+        function updateCar() {
+            const forward = new CANNON.Vec3(0, 0, 1);
+            const worldForward = carBody.quaternion.vmult(forward);
+
+            // Get input
+            let accelerate = 0;
+            let steer = 0;
+
+            // Keyboard
+            if (keys['w'] || keys['arrowup']) accelerate = 1;
+            if (keys['s'] || keys['arrowdown']) accelerate = -1;
+            if (keys['a'] || keys['arrowleft']) steer = 1;
+            if (keys['d'] || keys['arrowright']) steer = -1;
+            const brake = keys[' '] || keys['Space'];
+
+            // Mobile
+            if (joystickActive) {
+                accelerate = joystickY;
+                steer = -joystickX;
+            }
+
+            // Apply forces
+            if (accelerate !== 0) {
+                const force = worldForward.scale(accelerate * CONFIG.carSpeed * 20);
+                carBody.applyForce(force, carBody.position);
+            }
+
+            if (brake) {
+                carBody.velocity.scale(0.95, carBody.velocity);
+            }
+
+            // Steering
+            if (steer !== 0 && carBody.velocity.length() > 0.5) {
+                const turnAmount = steer * CONFIG.carTurnSpeed * 0.02;
+                carBody.angularVelocity.y = steer * CONFIG.carTurnSpeed * (accelerate >= 0 ? 1 : -1);
+            } else {
+                carBody.angularVelocity.y *= 0.9;
+            }
+
+            // Keep car upright
+            const currentQuat = carBody.quaternion;
+            const euler = new CANNON.Vec3();
+            currentQuat.toEuler(euler);
+            euler.x = 0;
+            euler.z = 0;
+            currentQuat.setFromEuler(euler.x, euler.y, euler.z);
+
+            // Update Three.js car from physics
+            car.position.copy(carBody.position);
+            car.quaternion.copy(carBody.quaternion);
+
+            // Rotate wheels
+            const wheelSpeed = carBody.velocity.length() * 0.3;
+            wheels.forEach(wheel => {
+                wheel.rotation.x += wheelSpeed * 0.1;
+            });
+
+            // Update speed display
+            speed = Math.round(carBody.velocity.length() * 3.6);
+            speedValue.textContent = speed;
+        }
+
+        // ==========================================
+        // CAMERA
+        // ==========================================
+        function updateCamera() {
+            const carDirection = new THREE.Vector3(0, 0, -1);
+            carDirection.applyQuaternion(car.quaternion);
+
+            const cameraOffset = carDirection.multiplyScalar(-CONFIG.cameraDistance);
+            cameraOffset.y = CONFIG.cameraHeight;
+
+            const targetPosition = car.position.clone().add(cameraOffset);
+
+            camera.position.lerp(targetPosition, 0.05);
+            camera.lookAt(car.position.x, car.position.y + 2, car.position.z);
+        }
+
+        // ==========================================
+        // ZONE DETECTION
+        // ==========================================
+        function checkZones() {
+            let inZone = null;
+
+            zones.forEach(zone => {
+                const distance = car.position.distanceTo(zone.position);
+
+                if (distance < zone.radius) {
+                    inZone = zone;
+
+                    // Animate ring
+                    zone.ring.rotation.z += 0.02;
+                    zone.ring.scale.setScalar(1 + Math.sin(Date.now() * 0.003) * 0.1);
+                }
+
+                // Animate floating cubes
+                zone.cube.position.y = 10 + Math.sin(Date.now() * 0.002 + zone.cube.userData.floatOffset) * 0.5;
+                zone.cube.rotation.y += 0.01;
+            });
+
+            if (inZone && inZone !== currentZone) {
+                currentZone = inZone;
+                showNotification(`Entered ${inZone.name} zone - Press E to view`);
+                openPanel(inZone.panel);
+            } else if (!inZone && currentZone) {
+                closePanel(currentZone.panel);
+                currentZone = null;
+            }
+        }
+
+        // ==========================================
+        // UI FUNCTIONS
+        // ==========================================
+        function showNotification(message, type = '') {
+            notification.textContent = message;
+            notification.className = 'notification show ' + type;
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function openPanel(panelId) {
+            document.getElementById(panelId).classList.add('active');
+
+            // Animate skill bars if skills panel
+            if (panelId === 'skillsPanel') {
+                setTimeout(() => {
+                    document.querySelectorAll('#skillsPanel .fill').forEach(fill => {
+                        fill.style.width = fill.dataset.width;
+                    });
+                }, 300);
+            }
+        }
+
+        function closePanel(panelId) {
+            document.getElementById(panelId).classList.remove('active');
+
+            // Reset skill bars
+            if (panelId === 'skillsPanel') {
+                document.querySelectorAll('#skillsPanel .fill').forEach(fill => {
+                    fill.style.width = '0%';
+                });
+            }
+        }
+
+        // Make closePanel available globally
+        window.closePanel = closePanel;
+
+        // ==========================================
+        // ANIMATION LOOP
+        // ==========================================
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Update physics
+            world.step(1 / 60);
+
+            // Update car
+            updateCar();
+
+            // Update camera
+            updateCamera();
+
+            // Check zones
+            checkZones();
+
+            // Update mini map
+            updateMiniMap();
+
+            // Render
+            renderer.render(scene, camera);
+        }
+
+        // ==========================================
+        // START
+        // ==========================================
+        init();
+    </script>
+</body>
+</html>
