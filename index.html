@@ -1276,6 +1276,10 @@
                 justify-content: center;
             }
 
+            .about-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
             .experience-timeline::before {
                 left: 20px;
             }
@@ -1293,6 +1297,10 @@
             .timeline-item:nth-child(even)::before {
                 left: 12px;
                 right: auto;
+            }
+
+            .skills-container {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -1398,6 +1406,123 @@
         @media (max-width: 768px) {
             .cursor {
                 display: none;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+
+            .skill-bar {
+                width: 80px;
+            }
+
+            .about-highlights {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form {
+                padding: 25px;
+            }
+
+            .tech-banner {
+                padding: 20px 0;
+            }
+
+            .tech-item {
+                font-size: 0.85rem;
+                gap: 8px;
+            }
+
+            .tech-item i {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 0.95rem;
+            }
+
+            .hero-description {
+                font-size: 0.95rem;
+            }
+
+            .section-title {
+                font-size: 1.7rem;
+            }
+
+            .section-subtitle {
+                font-size: 0.95rem;
+            }
+
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .code-body {
+                font-size: 0.75rem;
+                padding: 15px;
+            }
+
+            .skill-bar {
+                width: 60px;
+            }
+
+            .skill-info span {
+                font-size: 0.85rem;
+            }
+
+            .timeline-content {
+                padding: 20px;
+            }
+
+            .timeline-content h3 {
+                font-size: 1.1rem;
+            }
+
+            .timeline-content ul li {
+                font-size: 0.85rem;
+            }
+
+            .project-content {
+                padding: 20px;
+            }
+
+            .project-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .about-text h3 {
+                font-size: 1.5rem;
+            }
+
+            .about-text p {
+                font-size: 0.95rem;
+            }
+
+            .contact-info h3 {
+                font-size: 1.5rem;
+            }
+
+            .social-links a {
+                width: 45px;
+                height: 45px;
             }
         }
     </style>
