@@ -848,9 +848,16 @@
 
         .skill-progress {
             height: 100%;
-            background: var(--gradient-3);
+            background: linear-gradient(90deg, var(--react-blue), var(--js-yellow), var(--ts-blue), var(--react-blue));
+            background-size: 300% 100%;
             border-radius: 3px;
-            transition: width 1s ease;
+            animation: skillFlow 3s ease infinite;
+        }
+
+        @keyframes skillFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* Experience Section */
@@ -1453,7 +1460,7 @@
                     <span class="highlight">Frontend Specialist</span>
                     <span class="tech-icons">
                         <i class="fab fa-react"></i>
-                        <i class="fab fa-vuejs"></i>
+                        <i class="fab fa-react"></i>
                         <i class="fab fa-js"></i>
                     </span>
                 </h1>
@@ -1462,7 +1469,7 @@
                 </p>
                 <p class="hero-description">
                     I craft beautiful, responsive, and performant user interfaces using modern frontend technologies.
-                    Specializing in React, Vue.js, and creating exceptional web experiences that users love.
+                    Specializing in React, Next.js, and creating exceptional web experiences that users love.
                 </p>
                 <div class="hero-buttons">
                     <a href="#projects" class="btn btn-primary">
@@ -1483,21 +1490,19 @@
         <div class="tech-banner">
             <div class="tech-banner-inner">
                 <div class="tech-item"><i class="fab fa-react"></i> React</div>
-                <div class="tech-item"><i class="fab fa-vuejs"></i> Vue.js</div>
-                
+                <div class="tech-item"><i class="fab fa-react"></i> Next.js</div>
+                <div class="tech-item"><i class="fab fa-js"></i> TypeScript</div>
                 <div class="tech-item"><i class="fab fa-js"></i> JavaScript</div>
-                <div class="tech-item"><i class="fab fa-sass"></i> SASS</div>
+                <div class="tech-item"><i class="fab fa-css3-alt"></i> Tailwind</div>
                 <div class="tech-item"><i class="fab fa-css3-alt"></i> CSS3</div>
                 <div class="tech-item"><i class="fab fa-html5"></i> HTML5</div>
-                
                 <div class="tech-item"><i class="fab fa-react"></i> React</div>
-                <div class="tech-item"><i class="fab fa-vuejs"></i> Vue.js</div>
-                
+                <div class="tech-item"><i class="fab fa-react"></i> Next.js</div>
+                <div class="tech-item"><i class="fab fa-js"></i> TypeScript</div>
                 <div class="tech-item"><i class="fab fa-js"></i> JavaScript</div>
-                <div class="tech-item"><i class="fab fa-sass"></i> SASS</div>
+                <div class="tech-item"><i class="fab fa-css3-alt"></i> Tailwind</div>
                 <div class="tech-item"><i class="fab fa-css3-alt"></i> CSS3</div>
                 <div class="tech-item"><i class="fab fa-html5"></i> HTML5</div>
-                
             </div>
         </div>
 
@@ -1538,7 +1543,7 @@
                             </div>
                             <div class="code-line">
                                 <span class="line-number">5</span>
-                                &nbsp;&nbsp;<span class="code-property">skills</span>: [<span class="code-string">"React"</span>, <span class="code-string">"Vue"</span>, <span class="code-string">"TS"</span>],
+                                &nbsp;&nbsp;<span class="code-property">skills</span>: [<span class="code-string">"React"</span>, <span class="code-string">"Next.js"</span>, <span class="code-string">"TS"</span>],
                             </div>
                             <div class="code-line">
                                 <span class="line-number">6</span>
@@ -1571,7 +1576,7 @@
                     </p>
                     <p>
                         With 5+ years of experience, I specialize in building responsive, performant, and accessible
-                        user interfaces using modern frameworks like React, Vue.js, and Angular. I love turning
+                        user interfaces using React and Next.js. I love turning
                         complex designs into clean, maintainable code.
                     </p>
                     <div class="about-highlights">
@@ -1646,20 +1651,20 @@
                         </div>
                         <div class="skill-item">
                             <div class="skill-info">
-                                <i class="fab fa-vuejs"></i>
-                                <span>Vue.js / Nuxt</span>
+                                <i class="fab fa-react"></i>
+                                <span>Redux / Zustand</span>
                             </div>
                             <div class="skill-bar">
-                                <div class="skill-progress" style="width: 92%"></div>
+                                <div class="skill-progress" style="width: 90%"></div>
                             </div>
                         </div>
                         <div class="skill-item">
                             <div class="skill-info">
-                                <i class="fab fa-angular"></i>
-                                <span>Angular</span>
+                                <i class="fab fa-react"></i>
+                                <span>React Query</span>
                             </div>
                             <div class="skill-bar">
-                                <div class="skill-progress" style="width: 85%"></div>
+                                <div class="skill-progress" style="width: 88%"></div>
                             </div>
                         </div>
                     </div>
@@ -2087,10 +2092,10 @@
 
         <!-- Footer -->
         <footer>
-            <p>&copy; 2025 <span>Omer Tarig Abbas</span>. Crafted with React, Vue & lots of CSS.</p>
+            <p>&copy; 2025 <span>Omer Tarig Abbas</span>. Crafted with React, Next.js & lots of CSS.</p>
             <div class="footer-tech">
                 <i class="fab fa-react"></i>
-                <i class="fab fa-vuejs"></i>
+                <i class="fab fa-react"></i>
                 <i class="fab fa-js"></i>
                 <i class="fab fa-html5"></i>
                 <i class="fab fa-css3-alt"></i>
