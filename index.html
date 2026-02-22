@@ -59,7 +59,6 @@
             background: var(--darker);
             z-index: 9999;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             transition: opacity 0.8s ease, visibility 0.8s ease;
@@ -70,60 +69,98 @@
             visibility: hidden;
         }
 
-        .loader-content {
-            text-align: center;
-        }
-
-        .loader-code {
-            font-family: 'Fira Code', monospace;
-            font-size: 1.5rem;
-            margin-bottom: 30px;
+        .terminal-window {
+            width: 520px;
+            max-width: 90vw;
+            background: #0d1117;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
             opacity: 0;
-            animation: fadeInUp 1s ease forwards;
+            animation: fadeInUp 0.6s ease forwards;
         }
 
-        .loader-code .tag {
-            color: var(--angular-red);
+        .terminal-header {
+            background: #161b22;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .loader-code .attr {
-            color: var(--react-blue);
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
         }
 
-        .loader-code .value {
+        .terminal-dot.red { background: #ff5f57; }
+        .terminal-dot.yellow { background: #febc2e; }
+        .terminal-dot.green { background: #28c840; }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-right: 52px;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            min-height: 200px;
+        }
+
+        .terminal-line {
+            display: none;
+        }
+
+        .terminal-line.visible {
+            display: block;
+        }
+
+        .terminal-line .prompt {
             color: var(--vue-green);
         }
 
-        .loader-bar-container {
-            width: 300px;
-            height: 6px;
-            background: var(--border);
-            border-radius: 3px;
-            overflow: hidden;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.3s forwards;
+        .terminal-line .command {
+            color: var(--light);
         }
 
-        .loader-bar {
-            height: 100%;
-            width: 0%;
-            background: var(--gradient-3);
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
-
-        .loader-text {
-            margin-top: 20px;
+        .terminal-line .output {
             color: var(--gray);
-            font-size: 0.9rem;
-            font-family: 'Fira Code', monospace;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.5s forwards;
         }
 
-        .loader-percentage {
+        .terminal-line .success {
+            color: var(--vue-green);
+        }
+
+        .terminal-line .info {
             color: var(--react-blue);
-            font-weight: 600;
+        }
+
+        .terminal-line .path {
+            color: var(--react-blue);
+        }
+
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: var(--light);
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         /* 3D Canvas */
@@ -1533,16 +1570,23 @@
 
     <!-- Loading Screen -->
     <div class="loader" id="loader">
-        <div class="loader-content">
-            <div class="loader-code">
-                <span class="tag">&lt;</span><span class="attr">OTAJ</span><span class="tag">&gt;</span>
-                <span class="value">Loading...</span>
-                <span class="tag">&lt;/</span><span class="attr">OTAJ</span><span class="tag">&gt;</span>
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="terminal-dot red"></div>
+                <div class="terminal-dot yellow"></div>
+                <div class="terminal-dot green"></div>
+                <div class="terminal-title">otaj@portfolio ~ bash</div>
             </div>
-            <div class="loader-bar-container">
-                <div class="loader-bar" id="loaderBar"></div>
+            <div class="terminal-body" id="terminalBody">
+                <div class="terminal-line" id="line0"><span class="prompt">otaj@dev</span> <span class="path">~/portfolio</span> <span class="command">$ </span><span id="cmd0"></span><span class="terminal-cursor" id="cursor0"></span></div>
+                <div class="terminal-line" id="line1"><span class="output" id="out1"></span></div>
+                <div class="terminal-line" id="line2"><span class="prompt">otaj@dev</span> <span class="path">~/portfolio</span> <span class="command">$ </span><span id="cmd2"></span><span class="terminal-cursor" id="cursor2"></span></div>
+                <div class="terminal-line" id="line3"><span class="output" id="out3"></span></div>
+                <div class="terminal-line" id="line4"><span class="prompt">otaj@dev</span> <span class="path">~/portfolio</span> <span class="command">$ </span><span id="cmd4"></span><span class="terminal-cursor" id="cursor4"></span></div>
+                <div class="terminal-line" id="line5"><span class="output" id="out5"></span></div>
+                <div class="terminal-line" id="line6"><span class="success" id="out6"></span></div>
+                <div class="terminal-line" id="line7"><span class="info" id="out7"></span></div>
             </div>
-            <div class="loader-text">npm run build <span class="loader-percentage" id="loaderPercentage">0%</span></div>
         </div>
     </div>
 
@@ -2233,32 +2277,88 @@
 
     <script>
         // ==========================================
-        // LOADING SCREEN
+        // LOADING SCREEN — Terminal Typing Animation
         // ==========================================
         const loader = document.getElementById('loader');
-        const loaderBar = document.getElementById('loaderBar');
-        const loaderPercentage = document.getElementById('loaderPercentage');
-        let loadProgress = 0;
 
-        function updateLoader() {
-            loadProgress += Math.random() * 15;
-            if (loadProgress > 100) loadProgress = 100;
+        const terminalSequence = [
+            { type: 'show', line: 'line0' },
+            { type: 'type', target: 'cmd0', text: 'npm install', speed: 60 },
+            { type: 'hideCursor', target: 'cursor0' },
+            { type: 'show', line: 'line1' },
+            { type: 'instant', target: 'out1', text: 'added 1,247 packages in 3.2s' },
+            { type: 'pause', duration: 400 },
+            { type: 'show', line: 'line2' },
+            { type: 'type', target: 'cmd2', text: 'npm run build', speed: 55 },
+            { type: 'hideCursor', target: 'cursor2' },
+            { type: 'show', line: 'line3' },
+            { type: 'instant', target: 'out3', text: 'Compiling portfolio...' },
+            { type: 'pause', duration: 600 },
+            { type: 'show', line: 'line4' },
+            { type: 'type', target: 'cmd4', text: 'npm run dev', speed: 55 },
+            { type: 'hideCursor', target: 'cursor4' },
+            { type: 'show', line: 'line5' },
+            { type: 'instant', target: 'out5', text: 'Starting development server...' },
+            { type: 'pause', duration: 500 },
+            { type: 'show', line: 'line6' },
+            { type: 'instant', target: 'out6', text: '✓ Ready in 1.2s' },
+            { type: 'show', line: 'line7' },
+            { type: 'instant', target: 'out7', text: '→ http://localhost:3000' },
+            { type: 'pause', duration: 600 },
+            { type: 'done' },
+        ];
 
-            loaderBar.style.width = loadProgress + '%';
-            loaderPercentage.textContent = Math.floor(loadProgress) + '%';
+        function runTerminal(sequence, index = 0) {
+            if (index >= sequence.length) return;
+            const step = sequence[index];
 
-            if (loadProgress < 100) {
-                setTimeout(updateLoader, 150);
-            } else {
-                setTimeout(() => {
-                    loader.classList.add('hidden');
-                    initHeroAnimations();
-                }, 500);
+            switch (step.type) {
+                case 'show':
+                    document.getElementById(step.line).classList.add('visible');
+                    runTerminal(sequence, index + 1);
+                    break;
+                case 'type':
+                    typeText(step.target, step.text, step.speed, () => {
+                        runTerminal(sequence, index + 1);
+                    });
+                    break;
+                case 'hideCursor':
+                    document.getElementById(step.target).style.display = 'none';
+                    runTerminal(sequence, index + 1);
+                    break;
+                case 'instant':
+                    document.getElementById(step.target).textContent = step.text;
+                    runTerminal(sequence, index + 1);
+                    break;
+                case 'pause':
+                    setTimeout(() => runTerminal(sequence, index + 1), step.duration);
+                    break;
+                case 'done':
+                    setTimeout(() => {
+                        loader.classList.add('hidden');
+                        initHeroAnimations();
+                    }, 400);
+                    break;
             }
         }
 
+        function typeText(targetId, text, speed, callback) {
+            const el = document.getElementById(targetId);
+            let i = 0;
+            function tick() {
+                if (i < text.length) {
+                    el.textContent += text[i];
+                    i++;
+                    setTimeout(tick, speed);
+                } else {
+                    callback();
+                }
+            }
+            tick();
+        }
+
         window.addEventListener('load', () => {
-            setTimeout(updateLoader, 300);
+            setTimeout(() => runTerminal(terminalSequence), 300);
         });
 
         // ==========================================
