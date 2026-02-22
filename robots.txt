@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://omerajwa123.github.io/omerfol.github.io/sitemap.xml
