@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Omer Tarig Abbas — CV</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  html, body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    color: #333333;
+    background: #ffffff;
+    font-size: 10.5pt;
+    line-height: 1.45;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 0;
+    page-break-after: always;
+  }
+
+  .page:last-child {
+    page-break-after: auto;
+  }
+
+  /* ============ HEADER ============ */
+  .header {
+    background: #efefef;
+    padding: 14mm 18mm 10mm 18mm;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8mm;
+  }
+
+  .header-left h1 {
+    font-size: 28pt;
+    font-weight: normal;
+    letter-spacing: 1.5px;
+    color: #2b2b2b;
+    border-bottom: 1px solid #888;
+    padding-bottom: 2mm;
+    margin-bottom: 2mm;
+    display: inline-block;
+  }
+
+  .header-left .role {
+    font-size: 12pt;
+    color: #555;
+    font-style: italic;
+  }
+
+  .header-right {
+    text-align: right;
+    font-size: 10.5pt;
+    color: #444;
+  }
+
+  .contact-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3mm;
+    margin-bottom: 2.5mm;
+    font-size: 10.5pt;
+  }
+
+  .contact-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 6mm;
+    height: 6mm;
+    border-radius: 50%;
+    background: #2b2b2b;
+    color: #fff;
+    font-size: 7pt;
+    flex-shrink: 0;
+  }
+
+  /* ============ SECTIONS ============ */
+  .body {
+    padding: 8mm 18mm 14mm 18mm;
+  }
+
+  .section-title {
+    font-size: 14pt;
+    color: #2b2b2b;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: normal;
+    margin-bottom: 4mm;
+    position: relative;
+  }
+
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 38mm;
+    height: 1px;
+    background: #888;
+    margin-top: 1.5mm;
+  }
+
+  .summary {
+    text-align: center;
+    margin: 0 auto 8mm auto;
+    max-width: 165mm;
+  }
+
+  .summary .section-title {
+    text-align: center;
+  }
+
+  .summary .section-title::after {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .summary p {
+    font-size: 10.5pt;
+    color: #444;
+    line-height: 1.55;
+    text-align: center;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: 60mm 1fr;
+    gap: 10mm;
+    margin-top: 6mm;
+  }
+
+  .col-left .section-title,
+  .col-right .section-title {
+    margin-top: 4mm;
+  }
+
+  .col-left .section-title:first-child,
+  .col-right .section-title:first-child {
+    margin-top: 0;
+  }
+
+  /* ============ LEFT COLUMN ============ */
+  .edu-item {
+    margin-bottom: 5mm;
+  }
+
+  .edu-item h3 {
+    font-size: 11pt;
+    color: #222;
+    font-weight: bold;
+    margin-bottom: 1mm;
+  }
+
+  .edu-item p {
+    font-size: 10pt;
+    color: #555;
+    line-height: 1.4;
+  }
+
+  .bullet-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 6mm;
+  }
+
+  .bullet-list li {
+    padding-left: 4mm;
+    position: relative;
+    font-size: 10pt;
+    color: #444;
+    margin-bottom: 1.5mm;
+    line-height: 1.4;
+  }
+
+  .bullet-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #444;
+  }
+
+  /* ============ RIGHT COLUMN ============ */
+  .exp-item {
+    margin-bottom: 6mm;
+    border-left: 1px solid #ccc;
+    padding-left: 6mm;
+    margin-left: 0;
+  }
+
+  .exp-item h3 {
+    font-size: 11.5pt;
+    color: #222;
+    font-weight: bold;
+    margin-bottom: 1mm;
+  }
+
+  .exp-item .meta {
+    font-size: 10pt;
+    color: #666;
+    margin-bottom: 2mm;
+  }
+
+  .col-right > .section-title {
+    margin-left: 6mm;
+  }
+
+  .col-right > .section-title::after {
+    margin-left: 0;
+  }
+
+  /* ============ PROJECTS ============ */
+  .project-item {
+    margin-bottom: 4mm;
+    padding-left: 6mm;
+    border-left: 1px solid #ccc;
+  }
+
+  .project-item h4 {
+    font-size: 10.5pt;
+    color: #222;
+    font-weight: bold;
+    margin-bottom: 0.8mm;
+  }
+
+  .project-item .project-tech {
+    font-size: 9.5pt;
+    color: #777;
+    font-style: italic;
+    margin-bottom: 1mm;
+  }
+
+  .project-item p {
+    font-size: 10pt;
+    color: #444;
+    line-height: 1.4;
+    margin-bottom: 1mm;
+  }
+
+  .project-item a {
+    font-size: 9.5pt;
+    color: #1f6f9c;
+    word-break: break-all;
+    text-decoration: none;
+  }
+
+  .website-link {
+    padding-left: 6mm;
+    border-left: 1px solid #ccc;
+  }
+
+  .website-link a {
+    font-size: 10.5pt;
+    color: #1f6f9c;
+    text-decoration: none;
+  }
+
+  @media print {
+    body { background: #ffffff; }
+    .page { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ PAGE 1 ============ -->
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <h1>OMER TARIG ABBAS</h1>
+      <div class="role">Software Architect</div>
+    </div>
+    <div class="header-right">
+      <div class="contact-row"><span>+966568977210</span><span class="contact-icon">☎</span></div>
+      <div class="contact-row"><span>omerajwa49@gmail.com</span><span class="contact-icon">✉</span></div>
+      <div class="contact-row"><span>Saudi Arabia, Riyadh</span><span class="contact-icon">⌂</span></div>
+    </div>
+  </header>
+
+  <div class="body">
+
+    <!-- SUMMARY -->
+    <div class="summary">
+      <h2 class="section-title">Summary</h2>
+      <p>
+        Software Architect with 5+ years of engineering experience — evolving from full-stack developer to
+        frontend team lead and system architect. I design scalable web platforms, micro-frontend architectures,
+        and API contracts; shape monorepos and design systems; and drive technical decisions across delivery
+        teams. Strong foundation in clean architecture, domain-driven design, and pragmatic tradeoffs across
+        React/Next.js, Node.js, Vue.js, Laravel, and modern cloud-native tooling.
+      </p>
+    </div>
+
+    <div class="columns">
+
+      <!-- LEFT COLUMN -->
+      <div class="col-left">
+
+        <h2 class="section-title">Education</h2>
+        <div class="edu-item">
+          <h3>Omdurman Islamic University.</h3>
+          <p>Bachelor's Degree in Computer Science</p>
+          <p>2016 – 2023</p>
+        </div>
+        <div class="edu-item">
+          <h3>Afro-Tech Center</h3>
+          <p>Full stack Web &amp; Mobile Development</p>
+          <p>6/2020 - 8/2020</p>
+        </div>
+
+        <h2 class="section-title">Skills</h2>
+        <ul class="bullet-list">
+          <li>Technical leadership and team mentoring</li>
+          <li>Architecture decision-making and tradeoff analysis</li>
+          <li>Cross-team alignment and stakeholder communication</li>
+          <li>Code review and engineering standards ownership</li>
+          <li>Strong organization, time-management, and ownership mindset</li>
+        </ul>
+
+        <h2 class="section-title">Certifications</h2>
+        <ul class="bullet-list">
+          <li>web &amp; mobile development development.</li>
+          <li>training in smart node company.</li>
+          <li>training in Faisal Islamic Bank.</li>
+        </ul>
+
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="col-right">
+
+        <h2 class="section-title">Professional Experience</h2>
+
+        <div class="exp-item">
+          <h3>Frontend Team Lead</h3>
+          <div class="meta">Almusanid | 2025 - Present</div>
+          <ul class="bullet-list">
+            <li>Lead the frontend team and shape the architecture of Next.js / React platforms.</li>
+            <li>Define the design system, monorepo structure, and frontend engineering standards.</li>
+            <li>Own API contracts and integration patterns with backend teams.</li>
+            <li>Drive code reviews, mentor engineers, and align technical direction across squads.</li>
+          </ul>
+        </div>
+
+        <div class="exp-item">
+          <h3>Senior Software Engineer</h3>
+          <div class="meta">AFAQ ALTATBIGAT | 2024 - 2025</div>
+          <ul class="bullet-list">
+            <li>Drove architectural decisions on Next.js / React / Vue platforms and shaped technical direction across features.</li>
+            <li>Contributed to the design system, monorepo structure, and frontend engineering standards.</li>
+            <li>Designed API contracts and integration patterns with backend teams; modeled data flows end-to-end.</li>
+            <li>Built web and mobile applications using Flutter and Firebase for cross-platform delivery.</li>
+            <li>Conducted code reviews and mentored junior engineers on clean architecture and engineering best practices.</li>
+          </ul>
+        </div>
+
+        <div class="exp-item">
+          <h3>Senior Software Engineer — Web &amp; Mobile</h3>
+          <div class="meta">Smart Node Company | 2023 - 2024</div>
+          <ul class="bullet-list">
+            <li>System analysis, requirements gathering, and software system design.</li>
+            <li>Architected modular Vue.js applications and shared component libraries across products.</li>
+            <li>Designed REST APIs and backend controllers using Node.js and Laravel.</li>
+            <li>Modeled databases (tables, views, stored procedures) for transactional and analytical workloads.</li>
+            <li>Partnered with backend and design teams on end-to-end system contracts.</li>
+          </ul>
+        </div>
+
+        <div class="exp-item">
+          <h3>Full-Stack Engineer</h3>
+          <div class="meta">Freelance | 2020 - 2021</div>
+          <ul class="bullet-list">
+            <li>Designed and shipped custom web applications end-to-end for multiple clients.</li>
+            <li>Modeled data, defined APIs, and integrated frontend with backend services.</li>
+            <li>Architected e-commerce, e-learning, travel, and CMS platforms with clean separation of concerns.</li>
+            <li>Translated business requirements into technical designs and delivery plans.</li>
+          </ul>
+        </div>
+
+        <div class="exp-item">
+          <h3>Software Engineer — Backend</h3>
+          <div class="meta">Magical Target Company | 2019 - 2020</div>
+          <ul class="bullet-list">
+            <li>Designed relational schemas and managed MySQL databases for production systems.</li>
+            <li>Wrote optimized SQL queries to manage and retrieve data at scale.</li>
+            <li>Built REST APIs to facilitate clean separation between frontend and backend.</li>
+            <li>Developed applications with PHP, Laravel, Node.js, and Express frameworks.</li>
+            <li>Applied software engineering best practices to ensure maintainable, high-quality code.</li>
+            <li>Configured and maintained web servers and application infrastructure.</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAGE 2 ============ -->
+<div class="page">
+  <div class="body" style="padding-top: 18mm;">
+
+    <h2 class="section-title">Featured Projects</h2>
+
+    <div class="project-item">
+      <h4>Matryal.sa — Multivendor E-commerce Platform</h4>
+      <div class="project-tech">Next.js · React · TypeScript · Tailwind</div>
+      <p>A multivendor e-commerce platform connecting buyers with multiple sellers, featuring vendor dashboards, product management, and a seamless checkout flow.</p>
+      <a href="https://matryal.sa" target="_blank">https://matryal.sa</a>
+    </div>
+
+    <div class="project-item">
+      <h4>Shuhnh.sa — Transport Broker Platform</h4>
+      <div class="project-tech">Next.js · React · TypeScript · Tailwind</div>
+      <p>A transport broker platform connecting shippers with carriers, featuring real-time tracking, a bidding system, and logistics management.</p>
+      <a href="https://shuhnh.sa/" target="_blank">https://shuhnh.sa/</a>
+    </div>
+
+    <div class="project-item">
+      <h4>Afaq App — Application Platform</h4>
+      <div class="project-tech">Vue.js · Vuex · Nuxt · SCSS</div>
+      <p>A comprehensive application platform with modern UI/UX, responsive design, and smooth user experience across web and mobile clients.</p>
+      <a href="https://afaqapp.com/" target="_blank">https://afaqapp.com/</a>
+    </div>
+
+    <div class="project-item">
+      <h4>Ajwa Shop — E-commerce Platform</h4>
+      <div class="project-tech">Laravel · Vue.js · MySQL · Bootstrap</div>
+      <p>A full-featured e-commerce platform with product catalog, shopping cart, secure checkout, and order management system.</p>
+      <a href="https://kamac-ltd.com/AjwaShop/public/home" target="_blank">https://kamac-ltd.com/AjwaShop/public/home</a>
+    </div>
+
+    <div class="project-item">
+      <h4>E-Learning Platform</h4>
+      <div class="project-tech">Laravel · JavaScript · MySQL · CSS3</div>
+      <p>An educational platform with course management, video lessons, quizzes, progress tracking, and a student dashboard.</p>
+      <a href="https://kamac-ltd.com/E_learning_app_server/public/" target="_blank">https://kamac-ltd.com/E_learning_app_server/public/</a>
+    </div>
+
+    <div class="project-item">
+      <h4>Travel Platform</h4>
+      <div class="project-tech">Laravel · Vue.js · MySQL · Tailwind</div>
+      <p>A travel booking platform with destination search, trip planning, booking system, and travel itinerary management.</p>
+      <a href="https://kamac-ltd.com/tarvel/" target="_blank">https://kamac-ltd.com/tarvel/</a>
+    </div>
+
+    <div class="project-item">
+      <h4>Blog Platform</h4>
+      <div class="project-tech">Laravel · JavaScript · MySQL · Bootstrap</div>
+      <p>A content management system with article publishing, categories, comments, user authentication, and admin dashboard.</p>
+      <a href="https://kamac-ltd.com/blog/public/" target="_blank">https://kamac-ltd.com/blog/public/</a>
+    </div>
+
+    <div class="project-item">
+      <h4>Tism Test</h4>
+      <div class="project-tech">PHP · Laravel · MySQL</div>
+      <p>Custom assessment and testing platform.</p>
+      <a href="https://kamac-ltd.com/tism_test/" target="_blank">https://kamac-ltd.com/tism_test/</a>
+    </div>
+
+    <div class="project-item">
+      <h4>3D Portfolio Website</h4>
+      <div class="project-tech">Three.js · GSAP · WebGL · CSS3</div>
+      <p>An interactive 3D portfolio with Three.js animations, particle effects, and smooth scroll-based transitions.</p>
+    </div>
+
+    <div class="columns" style="margin-top: 10mm;">
+      <div class="col-left">
+        <h2 class="section-title">Technical Skills</h2>
+
+        <h3 style="font-size:10.5pt;color:#222;margin:2mm 0 1mm 0;">Architecture &amp; Design</h3>
+        <ul class="bullet-list">
+          <li>System Design &amp; Distributed Systems</li>
+          <li>Domain-Driven Design (DDD)</li>
+          <li>Micro-Frontends</li>
+          <li>Event-Driven Architecture</li>
+          <li>REST &amp; GraphQL API Design</li>
+          <li>Clean Architecture / SOLID</li>
+        </ul>
+
+        <h3 style="font-size:10.5pt;color:#222;margin:2mm 0 1mm 0;">Frontend &amp; Platforms</h3>
+        <ul class="bullet-list">
+          <li>React / Next.js</li>
+          <li>Vue.js</li>
+          <li>TypeScript / JavaScript ES6+</li>
+          <li>Tailwind / SASS / CSS3 / HTML5</li>
+          <li>Design Systems &amp; Component Libraries</li>
+        </ul>
+
+        <h3 style="font-size:10.5pt;color:#222;margin:2mm 0 1mm 0;">Backend, Mobile &amp; Data</h3>
+        <ul class="bullet-list">
+          <li>Node.js / Express</li>
+          <li>Laravel / PHP</li>
+          <li>Flutter &amp; Firebase</li>
+          <li>MySQL / SQL Modeling</li>
+          <li>Database Schema Design</li>
+        </ul>
+
+        <h3 style="font-size:10.5pt;color:#222;margin:2mm 0 1mm 0;">DevOps &amp; Tooling</h3>
+        <ul class="bullet-list">
+          <li>Git / GitHub</li>
+          <li>Docker / Containers</li>
+          <li>CI/CD Pipelines</li>
+          <li>Linux Administration</li>
+          <li>Monorepos (Nx / Turborepo)</li>
+          <li>Webpack / Vite</li>
+        </ul>
+      </div>
+      <div class="col-right">
+        <h2 class="section-title">My Personal Website</h2>
+        <div class="website-link">
+          <a href="https://omerajwa123.github.io/omerfol.github.io/" target="_blank">https://omerajwa123.github.io/omerfol.github.io/</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
